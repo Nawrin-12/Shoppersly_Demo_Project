@@ -14,35 +14,74 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
+public function apiLogin(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-    public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+    $credentials = $request->only('email', 'password');
 
-        $credentials = $request->only('email', 'password');
+    if (Auth::attempt($credentials)) {
+        $user = Auth::user();
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            
-            // Redirect based on role
-            switch ($user->role) {
-                case 'admin':
-                    return redirect()->intended('/admin/dashboard');
-                case 'vendor':
-                    return redirect()->intended('/vendor/dashboard');
-                case 'user':
-                default:
-                    return redirect()->intended('/dashboard');
-            }
-        }
-
-        throw ValidationException::withMessages([
-            'email' => ['The provided credentials do not match our records.'],
+        return response()->json([
+            'message' => 'Login successful',
+            'user' => [
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+            ],
         ]);
     }
+
+    return response()->json([
+        'message' => 'Invalid credentials'
+    ], 401);
+}
+
+    public function login(Request $request)
+{
+    $credentials = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+
+    if (Auth::attempt($credentials)) {
+        $user = Auth::user();
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Login successful',
+                'user' => [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $user->role,
+                ]
+            ]);
+        }
+
+        // Fallback: Web login
+        return match ($user->role) {
+            'admin' => redirect('/admin/dashboard'),
+            'vendor' => redirect('/vendor/dashboard'),
+            default => redirect('/dashboard'),
+        };
+    }
+
+    // Fail case
+    if ($request->expectsJson()) {
+        return response()->json([
+            'message' => 'Invalid credentials'
+        ], 401);
+    }
+
+    throw ValidationException::withMessages([
+        'email' => ['The provided credentials do not match our records.'],
+    ]);
+}
+
 
     public function logout(Request $request)
     {
