@@ -10,13 +10,15 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 
-class PasswordResetMail extends Mailable
+class ResetPasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $resetUrl;
-    public function __construct($resetUrl)
+    public $token;
+    public $email;
+    public function __construct($token,$email)
     {
-        $this->resetUrl =$resetUrl;
+        $this->token=$token;
+        $this->email=$email;
     }
 
     /**
@@ -35,10 +37,13 @@ class PasswordResetMail extends Mailable
      */
     public function content(): Content
     {
+        $resetUrl=config('app.frontend_url').'/reset-password?token='.$this->token. '&email='.$this->email;
         return new Content(
             'emails.password-reset',
              with: [
-                 'url' => $this->resetUrl,
+                 'url' => $resetUrl,
+                'token' => $this->token,
+                'email' => $this->email,
         ]
 
 

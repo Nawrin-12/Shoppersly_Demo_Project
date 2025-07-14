@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\PasswordResetMail;
+use App\Mail\ResetPasswordMail;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -44,6 +44,6 @@ class PasswordReset implements ShouldQueue
                 'email' => $this->user->email
             ]);
 
-        Mail::to($this->user->email)->send(new PasswordResetMail($resetUrl));
+        Mail::to($this->user->email)->send(new ResetPasswordMail($resetUrl));
     }
 }

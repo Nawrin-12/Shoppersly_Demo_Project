@@ -1,14 +1,21 @@
-@component('mail::message')
+<x-mail::message>
     # Password Reset Request
 
-    Click the button below to reset your password:
+    You are receiving this email because we received a password reset request for your account.
 
-    @component('mail::button', ['url' => $url])
+    <x-mail::button :url="$url">
         Reset Password
-    @endcomponent
+    </x-mail::button>
 
-    If you didn't request a password reset, please ignore this email.
+    This password reset link will expire in 60 minutes.
+
+    If you did not request a password reset, no further action is required.
 
     Thanks,<br>
-    {{ config('shoppersly') }}
-@endcomponent
+    {{ config('app.name') }}
+</x-mail::message>
+
+{{--Here is you generated password reset token--}}
+{{--<p>--}}
+{{--    <a href="{{url('')}}"--}}
+{{--</p>--}}
