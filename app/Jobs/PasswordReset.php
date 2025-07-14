@@ -41,9 +41,9 @@ class PasswordReset implements ShouldQueue
         );
         $resetUrl = $this->Url . '?' . http_build_query([
                 'token' => $token,
-                'email' => $this->user->email
+                'email' > $this->user->email
             ]);
 
-        Mail::to($this->user->email)->send(new ResetPasswordMail($resetUrl));
+        Mail::to($this->user->email)->send(new ResetPasswordMail( $resetUrl, $this->user->email ));
     }
 }
