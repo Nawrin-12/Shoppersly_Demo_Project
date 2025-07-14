@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\AuthController;
 
 // Authentication routes
@@ -10,7 +11,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Protected routes - require authentication
 Route::middleware('auth')->group(function () {
-    
+
     // Admin routes
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin/dashboard', function () {
@@ -32,3 +33,9 @@ Route::middleware('auth')->group(function () {
         });
     });
 });
+=======
+
+Route::get('/', function () {
+    return view('welcome');
+});
+>>>>>>> 52bac08 (registration_api_function)
