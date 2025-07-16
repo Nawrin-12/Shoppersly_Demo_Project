@@ -1,18 +1,27 @@
 @component('mail::message')
     # Password Reset Request
 
-    You are receiving this email because we received a password reset request for your account.
+    You requested a password reset.
 
-    @component('mail::button', ['url' => config('app.frontend_url').'/reset-password?token='.$token.'&email='.$email])
+    Click the button below to reset your password:
+
+    @component('mail::button', ['url' => $url])
         Reset Password
     @endcomponent
 
-    This password reset link will expire in 60 minutes.
+    If the button doesn't work, copy and paste this link into your browser:
 
-    If you did not request a password reset, no further action is required.
+    **{{ $url }}**
 
+    ---
 
+    **Token:** `{{ $token }}`
+    **Email:** `{{ $email }}`
+
+    If you didn’t request this, please ignore this email.
 @endcomponent
+
+
 
 {{--Here is you generated password reset token--}}
 {{--<p>--}}

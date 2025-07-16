@@ -7,4 +7,4 @@ use App\Http\Controllers\AuthController;
 Route::post('/register',[AuthController::class,'register']);
 
 Route::post('/forget-password',[AuthController::class,'forgetPassword']);
-//Route::get('/reset-password/{token}',[AuthController::class,'resetPassword']);
+Route::post('/reset-password',[AuthController::class,'resetPassword']);
