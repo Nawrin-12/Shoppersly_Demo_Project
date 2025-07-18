@@ -10,7 +10,9 @@ use App\Http\Controllers\ProductController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/forget-password', [AuthController::class, 'forgetPassword']);
-Route::get('/products', [ProductController::class, 'index']);
+Route::prefix('products')->controller(ProductController::class)->group(function () {
+    Route::get('/', 'index');
+});
 // Authenticated routes
 Route::middleware('auth')->group(function () {
 
