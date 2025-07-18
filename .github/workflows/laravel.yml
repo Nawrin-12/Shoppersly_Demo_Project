@@ -15,8 +15,7 @@ jobs:
         image: mysql:8
         env:
           MYSQL_DATABASE: shoppersly
-          MYSQL_USER: root
-          MYSQL_PASSWORD: ""
+          MYSQL_PASSWORD: root
           MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
