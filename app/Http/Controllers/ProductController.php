@@ -1,16 +1,23 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Resources\ProductResource;
 
 class ProductController extends Controller
 {
-    public function index()
+    /**
+     * Display a listing of products.
+     *
+     * @return JsonResponse
+     */
+    public function index(): JsonResponse
     {
         return response()->json([
             'success' => true,
-            'products' => Product::all()
+            'products' => ProductResource::collection(Product::all())
         ]);
     }
 }

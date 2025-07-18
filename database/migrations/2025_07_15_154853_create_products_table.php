@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\ProductStatus;
+
 
 return new class extends Migration
 {
@@ -18,7 +20,7 @@ return new class extends Migration
     $table->string('category');
     $table->decimal('price', 8, 2);
     $table->string('url');
-    $table->enum('status', ['available', 'unavailable'])->default('available');
+    $table->string('status')->default(ProductStatus::Available->value);
     $table->timestamps();
 });
     }
