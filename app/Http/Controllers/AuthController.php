@@ -41,30 +41,39 @@ class AuthController extends Controller
         }
     }
 
-    public function login(Request $request): JsonResponse
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
+public function login(Request $request): JsonResponse
+{
+    // Validate input
+    $credentials = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-            return response()->json([
-                'message' => 'Login successful',
-                'user' => [
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'role' => $user->role,
-                ],
-            ]);
-        }
+    // Find user by email
+    $user = User::where('email', $credentials['email'])->first();
 
-      else{
-        return response()->json(['message' =>'Login Unsuccessful']) ;
-      }
+    // Check if user exists and password is correct
+    if (! $user || ! is_string($user->password) || ! Hash::check($credentials['password'], $user->password)) {
+        return response()->json(['message' => 'Login unsuccessful'], 401);
     }
+
+    // Create Sanctum token
+    $token = $user->createToken('api-token')->plainTextToken;
+
+    // Return response
+    return response()->json([
+        'message' => 'Login successful',
+        'user' => [
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+        ],
+        'token' => $token,
+    ]);
+}
+
+
 
     public function forgetPassword(ForgetPasswordRequest $request): JsonResponse
     {

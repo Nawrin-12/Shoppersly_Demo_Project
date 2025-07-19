@@ -14,4 +14,9 @@ class Product extends Model
     protected $casts = [
         'status' => ProductStatus::class,
     ];
+
+      public function images()
+    {
+        return $this->hasMany(ProductImage::class);
+    }
 }
