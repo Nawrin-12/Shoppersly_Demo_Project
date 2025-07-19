@@ -31,5 +31,18 @@ class PasswordReset implements ShouldQueue
 //        $resetUrl = url('/reset-password/'.$this->token . '?email=' . urlencode($this->user->email));
 
         Mail::to($this->user->email)->send(new ResetPasswordMail($this->resetUrl,$this->token,$this->user->email));
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $this->user->email],
+            [
+                'token' => $token,
+                'created_at'=>Carbon::now()
+            ]
+        );
+        $resetUrl = $this->Url . '?' . http_build_query([
+                'token' => $token,
+                'email' > $this->user->email
+            ]);
+
+        Mail::to($this->user->email)->send(new ResetPasswordMail( $resetUrl, $this->user->email ));
     }
 }
