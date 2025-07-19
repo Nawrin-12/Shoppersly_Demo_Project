@@ -20,4 +20,9 @@ class Product extends Model
         'user_id',
 
     ];
+
+      public function images()
+    {
+        return $this->hasMany(ProductImage::class);
+    }
 }
