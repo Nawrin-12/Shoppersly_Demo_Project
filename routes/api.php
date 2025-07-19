@@ -21,6 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', 'store');  
     });
 
+Route::post('/forget-password',[AuthController::class,'forgetPassword']);
+Route::post('/reset-password',[AuthController::class,'resetPassword']);
     // Get current logged-in user
     Route::get('/user', function () {
         return response()->json(Auth::user());

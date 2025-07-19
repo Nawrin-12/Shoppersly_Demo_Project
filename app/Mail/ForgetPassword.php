@@ -16,6 +16,7 @@ class ForgetPassword extends Mailable
     /**
      * Create a new message instance.
      */
+//    laracast Tutorial
     public function __construct(Public forgetPassword $token)
     {
         //
