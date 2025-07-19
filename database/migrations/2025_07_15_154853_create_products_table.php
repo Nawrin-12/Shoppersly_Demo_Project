@@ -1,63 +1,35 @@
 <?php
 
-namespace App\Http\Controllers;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use App\Enums\ProductStatus;
 
-use App\Models\Product;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use App\Http\Resources\ProductResource;
 
-class ProductController extends Controller
+return new class extends Migration
 {
     /**
-     * Display a listing of products.
-     *
-     * @return JsonResponse
+     * Run the migrations.
      */
-    public function index(): JsonResponse
+    public function up(): void
     {
-        
-        $products = Product::with('images')->get();
-
-        return response()->json([
-            'success' => true,
-            'products' => ProductResource::collection($products),
-        ]);
+        Schema::create('products', function (Blueprint $table) {
+    $table->id();
+    $table->string('name');
+    $table->string('description');
+    $table->string('category');
+    $table->decimal('price', 8, 2);
+    $table->string('url');
+    $table->string('status')->default(ProductStatus::Available->value);
+    $table->timestamps();
+});
     }
 
     /**
-     * Store a newly created product with multiple images.
-     *
-     * @param Request $request
-     * @return JsonResponse
+     * Reverse the migrations.
      */
-    public function store(Request $request): JsonResponse
+    public function down(): void
     {
-        // Validation
-        $request->validate([
-            'name' => 'required|string',
-            'description' => 'required|string',
-            'category' => 'required|string',
-            'price' => 'required|numeric',
-            'url' => 'required|url',
-            'status' => 'required|in:available,unavailable',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        // Product create
-        $product = Product::create($request->only(['name', 'description', 'category', 'price', 'url', 'status']));
-
-        // Multiple images upload and save
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $path = $image->store('product_images', 'public');
-                $product->images()->create(['image_path' => $path]);
-            }
-        }
-
-        return response()->json([
-            'success' => true,
-            'product' => new ProductResource($product->load('images')),
-        ]);
+        Schema::dropIfExists('products');
     }
-}
+};
