@@ -27,10 +27,18 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
+            'number' => $this->faker->unique()->numerify('018########'),
+//            'number' => $this->faker->numberBetween(100000, 9999999),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
     }
+    public function vendor(): static{
+        return $this->state(fn(array $attributes) => [
+            'role' => 'vendor',
+        ]);
+    }
+
 
     /**
      * Indicate that the model's email address should be unverified.
