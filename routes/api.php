@@ -14,7 +14,12 @@ Route::prefix('products')->controller(ProductController::class)->group(function 
     Route::get('/', 'index');
 });
 // Authenticated routes
-Route::middleware('auth')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
+
+    // only logged in users can add
+    Route::prefix('products')->controller(ProductController::class)->group(function () {
+        Route::post('/', 'store');  
+    });
 
     // Get current logged-in user
     Route::get('/user', function () {
