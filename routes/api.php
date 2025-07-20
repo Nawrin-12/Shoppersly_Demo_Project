@@ -1,10 +1,16 @@
 <?php
 
+use App\Http\Controllers\ProductController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
+Route::post('/product-update', [ProductController::class, 'update']);
 
 // Public routes
 Route::post('/login', [AuthController::class, 'login']);
