@@ -11,29 +11,26 @@ class UserSeeder extends Seeder
 {
     public function run()
     {
-        User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'number' => '1234567555',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Admin User',
+                'number' => '1234567555',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+            ]
+        );
 
-        User::create([
-            'name' => 'Vendor User',
-            'email' => 'vendor@example.com',
-            'number' => '1234437890',
-            'password' => Hash::make('password'),
-            'role' => 'vendor',
-        ]);
-
-        User::create([
-            'name' => 'Regular User',
-            'email' => 'user@example.com',
-            'number' => '1234567730',
-            'password' => Hash::make('password'),
-            'role' => 'user',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'vendor@example.com'],
+            [
+                'name' => 'Vendor User',
+                'number' => '1234437890',
+                'password' => Hash::make('password'),
+                'role' => 'vendor',
+            ]
+        );
+//        $vendorCount = 5;
 
         $vendor = User::factory()->vendor()->create();
         Product::factory()->count(1)->create([

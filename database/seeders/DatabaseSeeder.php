@@ -17,5 +17,8 @@ class DatabaseSeeder extends Seeder
         UserSeeder::class,
         ProductSeeder::class,
     ]);
+         User::factory(3)->create();
+         $this->call(ProductWithImagesSeeder::class);
+
     }
 }

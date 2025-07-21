@@ -104,6 +104,19 @@ class ProductController extends Controller
                 'softDeletedProd' => $softDeletedProd,
                 'message' => 'Soft Deleted Data'
             ]);
+    }
 
+    public function ProductDetails($id): JsonResponse
+    {
+        $product = Product::with('images', 'user')->find($id);
+        if(!$product){
+            return response()->json([
+                'message' => 'Product not found'
+            ]);
+        }
+        return response()->json([
+            'message' => 'Product Details',
+            'product' => $product
+        ]);
     }
 }
