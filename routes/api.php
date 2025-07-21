@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 
 use Illuminate\Http\Request;
@@ -48,12 +50,8 @@ Route::middleware('auth:sanctum')->group(function () {
         ]);
     });
 
-    // User-only route
-    Route::middleware('role:user')->get('/api/user/dashboard', function () {
-        return response()->json([
-            'message' => 'Hello User',
-            'user' => Auth::user()
-        ]);
-    });
+Route::post('/product-update', [ProductController::class, 'update']);
+Route::delete('/product-delete', [ProductController::class, 'delete']);
+Route::get('/product-delete', [ProductController::class, 'SoftDeletedData']);
 
-});
+Route::get('/product-details/{id}', [ProductController::class, 'ProductDetails']);
