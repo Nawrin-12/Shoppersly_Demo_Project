@@ -34,7 +34,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function () {
         return response()->json(Auth::user());
     });
-    
+    Route::post('/logout-all', [AuthController::class, 'logoutAllDevices']);
+
     // Role-based dashboards
     Route::middleware('role:admin')->get('/api/admin/dashboard', function () {
         return response()->json([
