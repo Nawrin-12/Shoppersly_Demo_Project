@@ -3,16 +3,12 @@
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProductController;
-Route::post('/product-update', [ProductController::class, 'update']);
+Route::put('/product-update', [ProductController::class, 'update']);
 
 // Public routes
 Route::post('/login', [AuthController::class, 'login']);
@@ -26,7 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // only logged in users can add
     Route::prefix('products')->controller(ProductController::class)->group(function () {
-        Route::post('/', 'store');  
+        Route::post('/', 'store');
     });
 
     // Get current logged-in user
@@ -49,7 +45,9 @@ Route::middleware('auth:sanctum')->group(function () {
             'user' => Auth::user()
         ]);
     });
+});
 
+//Product-APIs
 Route::post('/product-update', [ProductController::class, 'update']);
 Route::delete('/product-delete', [ProductController::class, 'delete']);
 Route::get('/product-delete', [ProductController::class, 'SoftDeletedData']);
