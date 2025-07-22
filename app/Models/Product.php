@@ -1,18 +1,24 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Enums\ProductStatus;
+use Illuminate\Notifications\Notifiable;
+
 
 class Product extends Model
 {
+    use HasFactory, Notifiable;
+    protected $table = 'products';
     protected $fillable = [
-        'name', 'description', 'category', 'price', 'url', 'status'
-    ];
+        'name',
+        'description',
+        'category',
+        'price',
+        'url',
+        'status',
+        'user_id',
 
-    protected $casts = [
-        'status' => ProductStatus::class,
     ];
 
       public function images()
