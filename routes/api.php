@@ -8,15 +8,24 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 
-Route::put('/product-update', [ProductController::class, 'update']);
 
 // Public routes
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/forget-password', [AuthController::class, 'forgetPassword']);
+
+//Product Api
+Route::put('/product-update', [ProductController::class, 'update']);
+Route::delete('/product-delete', [ProductController::class, 'delete']);
+Route::get('/product-delete', [ProductController::class, 'SoftDeletedData']);
+Route::get('/product-details/{id}', [ProductController::class, 'ProductDetails']);
+
+
+
 Route::prefix('products')->controller(ProductController::class)->group(function () {
     Route::get('/', 'index');
 });
+
 // Authenticated routes
 Route::middleware('auth:sanctum')->group(function () {
 

@@ -44,40 +44,6 @@ class AuthController extends Controller
         }
     }
 
-
-public function login(Request $request): JsonResponse
-{
-    // Validate input
-    $credentials = $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
-
-    // Find user by email
-    $user = User::where('email', $credentials['email'])->first();
-
-    // Check if user exists and password is correct
-    if (! $user || ! is_string($user->password) || ! Hash::check($credentials['password'], $user->password)) {
-        return response()->json(['message' => 'Login unsuccessful'], 401);
-    }
-
-    // Create Sanctum token
-    $token = $user->createToken('api-token')->plainTextToken;
-
-    // Return response
-    return response()->json([
-        'message' => 'Login successful',
-        'user' => [
-            'name' => $user->name,
-            'email' => $user->email,
-            'role' => $user->role,
-        ],
-        'token' => $token,
-    ]);
-}
-
-
-
     public function forgetPassword(ForgetPasswordRequest $request): JsonResponse
     {
         $validated = $request->validated();
@@ -97,10 +63,6 @@ public function login(Request $request): JsonResponse
                 ]);
             $resetUrl = config('api/reset-password?token='.$token .'&email=' .urlencode($user->email));
             PasswordReset::dispatch($user,$token,$resetUrl);
-
-                    'created_at' => Carbon::now(),
-                ]
-            );
             Mail::to($validated['email'])->send(new ResetPasswordMail($token, $validated['email']));
             return response()->json([
                 'message' => "Password reset link has been sent to your email",
@@ -150,48 +112,4 @@ public function login(Request $request): JsonResponse
 
     }
 
-//    public function forgetPassword(forgetPasswordRequest $request): JsonResponse
-//    {
-//        $validated = $request->validated();
-//        try {
-//            $user = User::firstWhere('email', $validated['email']);
-//            if (!$user) {
-//                return response()->json([
-//                    'message' => "User does not exist",
-//                ]);
-//            }
-//
-//            $token = str::random(20);
-//            DB::table('password_reset_tokens')->insert([
-//                'email' => $request->email,
-//                'token' => $token,
-//                'created_at' => Carbon::now()
-//            ]);
-//            Mail::to($token)->send(
-//                new ForgetPassword($token)
-//            );
-//            return response()->json([
-//                'message' => "Reset token has been sent your email",
-//            ]);
-//        } catch (\Exception $exception) {
-//            Log::error($exception->getMessage());
-//            return response()->json([
-//                'message' => "Failed to send email",
-//                'error' => $exception->getMessage(),
-//            ]);
-//        }
-//    }
-
-
-    public function logout(Request $request): JsonResponse
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-
-        return response()->json([
-            'message' => 'Logout successful',
-        ]);
-    }
 }
