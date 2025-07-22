@@ -1,11 +1,11 @@
 <?php
 
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\OrderController;
 
 // Public routes
 Route::post('/login', [AuthController::class, 'login']);
@@ -21,7 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Product creation only for logged in users
     Route::prefix('products')->controller(ProductController::class)->group(function () {
-        Route::post('/', 'store');  
+        Route::post('/', 'store');
+        Route::post('/update', 'update');  // moved this here if needed
     });
 
     // Add order route
@@ -56,4 +57,3 @@ Route::middleware('auth:sanctum')->group(function () {
         ]);
     });
 });
-
