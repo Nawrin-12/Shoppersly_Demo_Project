@@ -13,14 +13,12 @@ use App\Models\User;
 class ResetPasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $token;
-    public $email;
-    public $resetUrl;
-    public function __construct($token,$email)
+    public $token, $resetUrl, $email;
+    public function __construct($token,$resetUrl, $email)
     {
-        $this->token=$token;
-        $this->email=$email;
-        $this->resetUrl= config('app.frontend_url').'/reset-password?token='.$token.'&email='.$email;
+        $this->resetUrl = $resetUrl;
+        $this->token =$token;
+        $this->email = $email;
     }
 
     /**
@@ -34,19 +32,16 @@ class ResetPasswordMail extends Mailable
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
 //        $resetUrl=config('app.frontend_url').'/reset-password?token='.$this->token. '&email='.$this->email;
         return new Content(
-             view:'emails.password-reset',
+             markdown:'emails.password-reset',
              with: [
                  'url' => $this->resetUrl,
                  'token' => $this->token,
                  'email' => $this->email,
-        ]
+        ],
 
 
 //            view: 'view.name',
