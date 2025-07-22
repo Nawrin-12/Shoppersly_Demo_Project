@@ -5,28 +5,34 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
 
 // Public routes
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/forget-password', [AuthController::class, 'forgetPassword']);
+
 Route::prefix('products')->controller(ProductController::class)->group(function () {
-    Route::get('/', 'index');
+    Route::get('/', 'index'); // public product listing
 });
+
 // Authenticated routes
 Route::middleware('auth:sanctum')->group(function () {
 
-    // only logged in users can add
+    // Product creation only for logged in users
     Route::prefix('products')->controller(ProductController::class)->group(function () {
         Route::post('/', 'store');  
     });
 
-    // Get current logged-in user
+    // Add order route
+    Route::post('/orders', [OrderController::class, 'store']);
+
+    // Get current logged-in user info
     Route::get('/user', function () {
         return response()->json(Auth::user());
     });
 
-    // Admin-only route
+    // Admin-only dashboard
     Route::middleware('role:admin')->get('/api/admin/dashboard', function () {
         return response()->json([
             'message' => 'Hello Admin',
@@ -34,7 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
         ]);
     });
 
-    // Vendor-only route
+    // Vendor-only dashboard
     Route::middleware('role:vendor')->get('/api/vendor/dashboard', function () {
         return response()->json([
             'message' => 'Hello Vendor',
@@ -42,12 +48,12 @@ Route::middleware('auth:sanctum')->group(function () {
         ]);
     });
 
-    // User-only route
+    // User-only dashboard
     Route::middleware('role:user')->get('/api/user/dashboard', function () {
         return response()->json([
             'message' => 'Hello User',
             'user' => Auth::user()
         ]);
     });
-
 });
+
