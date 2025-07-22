@@ -71,23 +71,41 @@ class ProductController extends Controller
                     'message' => 'User not found'
                 ]);
             }
-            if(!$user->role=='vendor'||!$user->role=='admin'){
+            $product= Product::query()->where('id', $validated['product_id'])->first();
+            if(!$product){
+                return response()->json([
+                    'message' => 'Product not found'
+                ],404);
+            }
+            if($user->role=='admin'||$user->role=='vendor' && $product->user_id === $user->id){
+                $product->delete();
+                return response()->json([
+                    'message' => 'Product deleted successfully'
+                ]);
+            }
+            else{
                 return response()->json([
                     'message' => 'You are not authorized to delete this product'
                 ]);
             }
-            $product= Product::query()->where('id', $validated['product_id'])
-                ->where('user_id',$user->id)
-                ->first();
-            if(!$product){
-                return response()->json([
-                    'message' => 'Product not found'
-                ]);
-            }
-            $product->delete();
-            return response()->json([
-                'message' => 'Product deleted successfully'
-            ]);
+//            if(!$user->role=='vendor'||!$user->role=='admin'){
+//                return response()->json([
+//                    'message' => 'You are not authorized to delete this product'
+//                ]);
+//            }
+//            $product= Product::query()->where('id', $validated['product_id'])
+//                ->where('user_id',$user->id)
+//                ->first();
+//            if(!$product){
+//                return response()->json([
+//                    'message' => 'Product not found'
+//                ]);
+//            }
+//
+//            $product->delete();
+//            return response()->json([
+//                'message' => 'Product deleted successfully'
+//            ]);
 
         }catch(\Exception $exception){
             Log::error('FULL Error:' .$exception->getMessage());
