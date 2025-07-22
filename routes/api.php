@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Product creation only for logged in users
     Route::prefix('products')->controller(ProductController::class)->group(function () {
         Route::post('/', 'store');
-        Route::post('/update', 'update');  // moved this here if needed
+        Route::post('/update', 'update');  // keep if you want update feature
     });
 
     // Add order route
