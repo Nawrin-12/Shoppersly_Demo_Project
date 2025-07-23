@@ -11,17 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('description');
-            $table->string('category');
-            $table->decimal('price',10,2);
-            $table->string('url');
-            $table->enum('status', ['available', 'unavailable'])->default('available');
-            $table->foreignId('user_id')->constrained();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('products')) {
+            Schema::create('products', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('description');
+                $table->string('category');
+                $table->decimal('price',10,2);
+                $table->string('url');
+                $table->enum('status', ['available', 'unavailable'])->default('available');
+
+                $table->timestamps();
+            });
+
+        }
+
     }
 
     /**
