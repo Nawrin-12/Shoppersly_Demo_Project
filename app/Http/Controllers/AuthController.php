@@ -116,4 +116,17 @@ public function login(Request $request): JsonResponse
             'message' => 'Logout successful',
         ]);
     }
+
+    public function singleLogout(Request $request): JsonResponse{
+        $user = Auth()->user();
+        if (!$user) {
+            return response()->json([
+                'message' => "User does not exist",
+            ]);
+        }
+        $request->user()->currentAccessToken()->delete();
+        return response()->json([
+            'message' => 'Logged out from current device successfully',
+        ]);
+    }
 }

@@ -14,6 +14,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/forget-password', [AuthController::class, 'forgetPassword']);
 Route::middleware('auth:sanctum')->get('/orders', [OrderController::class, 'index']);
+Route::middleware('auth:sanctum')->post('/single-logout', [AuthController::class, 'singleLogout']);
 
 // Public product listing
 Route::prefix('products')->controller(ProductController::class)->group(function () {
