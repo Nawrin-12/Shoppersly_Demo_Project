@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
+
+use App\Http\Controllers\ProductController;
 Route::post('/product-update', [ProductController::class, 'update']);
 
 // Public routes
@@ -14,6 +16,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/forget-password', [AuthController::class, 'forgetPassword']);
 Route::middleware('auth:sanctum')->get('/orders', [OrderController::class, 'index']);
+
 
 // Public product listing
 Route::prefix('products')->controller(ProductController::class)->group(function () {
@@ -28,9 +31,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/update', 'update');
     });
 
+
     // Add order route
     Route::post('/orders', [OrderController::class, 'store']);
 
+
+    Route::post('/orders', [OrderController::class, 'store']);
     // Get current logged-in user info
     Route::get('/user', function () {
         return response()->json(Auth::user());
@@ -57,4 +63,5 @@ Route::middleware('auth:sanctum')->group(function () {
             'user' => Auth::user()
         ]);
     });
+});
 });

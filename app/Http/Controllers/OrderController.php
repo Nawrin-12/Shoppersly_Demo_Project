@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
+
 use App\Models\Order;
 use App\Models\OrderImage;
 use App\Http\Resources\OrderResource;
@@ -59,4 +60,6 @@ class OrderController extends Controller{
     }
 
 }
+}
+ 
 
