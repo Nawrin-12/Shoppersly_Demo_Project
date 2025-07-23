@@ -33,6 +33,8 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Add order route
     Route::post('/orders', [OrderController::class, 'store']);
+    Route::post('/orders/{id}/approve', [OrderController::class, 'approve']);
+
     
     // Get current logged-in user info
     Route::get('/user', function () {

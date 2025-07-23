@@ -17,6 +17,8 @@ return new class extends Migration
     $table->string('customer_email');
     $table->text('product_details');
     $table->timestamps();
+    
+
 });
 
     }
