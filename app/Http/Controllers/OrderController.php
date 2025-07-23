@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Order;
 use App\Models\OrderImage;
@@ -33,5 +34,32 @@ class OrderController extends Controller{
     ]);
 }
 
+    public function index(): JsonResponse
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        if ($user->role === 'admin') {
+            $orders = Order::with('product', 'user')->get();
+        } elseif ($user->role === 'vendor') {
+            $productIds = $user->products()->pluck('id');
+            $orders = Order::with('product', 'user')->whereIn('product_id', $productIds)->get();
+        } else {
+//            $orders = $user->orders()->with('product')->get();
+            $orders = Order::with('product')->where('customer_email',$user->email)->get();
+
+        }
+
+        return response()->json([
+            'message' => 'Orders retrieved successfully',
+            'orders' => $orders,
+        ]);
+    }
+
+}
 }
  
+
